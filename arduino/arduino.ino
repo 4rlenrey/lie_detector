@@ -31,25 +31,21 @@ uint32_t redBuffer[BUFFER_SIZE];  // Red LED sensor data
 #endif
 
 void setup() {
-  Serial.begin(115200); // Initialize serial communication at 115200 bits per second
+  Serial.begin(115200); 
 
-  // Initialize sensor
-  if (!particleSensor.begin(Wire, I2C_SPEED_FAST)) { // Use default I2C port, 400kHz speed
+  if (!particleSensor.begin(Wire, I2C_SPEED_FAST)) { 
     Serial.println(F("MAX30105 was not found. Please check wiring/power."));
     while (1);
   }
 
-  byte ledBrightness = 60; // Options: 0=Off to 255=50mA
-  byte sampleAverage = 4; // Options: 1, 2, 4, 8, 16, 32
+  byte ledBrightness = 60; 
+  byte sampleAverage = 4;
   byte ledMode = 2; // Options: 1 = Red only, 2 = Red + IR, 3 = Red + IR + Green
-  byte sampleRate = 100; // Options: 50, 100, 200, 400, 800, 1000, 1600, 3200
+  byte sampleRate = 400; // Options: 50, 100, 200, 400, 800, 1000, 1600, 3200
   int pulseWidth = 411; // Options: 69, 118, 215, 411
   int adcRange = 4096; // Options: 2048, 4096, 8192, 16384
 
   particleSensor.setup(ledBrightness, sampleAverage, ledMode, sampleRate, pulseWidth, adcRange); // Configure sensor with these settings
-
-  setTime(0, 0, 0, 1, 1, 2023); // Set initial time (adjust as needed)
-  // Serial.println("Timestamp,Red,IR,GSR"); // Print CSV header
 }
 
 void loop() {

@@ -1,0 +1,2 @@
+pyserial
+pyside6
