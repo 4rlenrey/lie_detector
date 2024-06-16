@@ -4,3 +4,7 @@ data/recordings
 
 __pycache__
 
+better_questions.csv
+never_have.csv
+questions.csv
+ignore
