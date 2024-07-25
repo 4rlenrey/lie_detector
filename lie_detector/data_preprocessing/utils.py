@@ -73,7 +73,7 @@ def clip_values(ppg_data):
     Q1 = np.percentile(ppg_data, 25)
     Q3 = np.percentile(ppg_data, 75)
 
-    # Calculate IQR (Interquartile Range)
+    # Calculate IQR
     IQR = Q3 - Q1
 
     # Determine thresholds based on IQR

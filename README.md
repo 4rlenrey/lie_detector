@@ -13,6 +13,11 @@ This project combines hardware and software to create a system that can detect l
 
 This project develops a lie-detection system using a combination of hardware and software. The system is integrated with an app that displays questions and records the answers.
 
+<div style="text-align: center;">
+  <img src="assets/recording_20240621_124856_plot.png" alt="Placeholder Image" style="display: block; margin: 0 auto;" />
+  <p><strong>Example of obtained signals</strong></p>
+</div>
+
 ## Components
 
 ### Hardware
