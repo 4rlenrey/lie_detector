@@ -8,3 +8,10 @@ better_questions.csv
 never_have.csv
 questions.csv
 ignore
+
+answers/
+data/
+
+data_full/
+questions/
+lie_detector_model.h5

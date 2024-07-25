@@ -15,23 +15,11 @@ OUTPUT:
 
 #include <Wire.h>
 #include "MAX30105.h"
-#include <TimeLib.h>
 
 MAX30105 particleSensor;
-const int GSR = A0;
-
-#define BUFFER_SIZE 100
-
-#if defined(__AVR_ATmega328P__) || defined(__AVR_ATmega168__)
-uint16_t irBuffer[BUFFER_SIZE]; // Infrared LED sensor data
-uint16_t redBuffer[BUFFER_SIZE];  // Red LED sensor data
-#else
-uint32_t irBuffer[BUFFER_SIZE]; // Infrared LED sensor data
-uint32_t redBuffer[BUFFER_SIZE];  // Red LED sensor data
-#endif
 
 void setup() {
-  Serial.begin(115200); 
+  Serial.begin(230400); 
 
   if (!particleSensor.begin(Wire, I2C_SPEED_FAST)) { 
     Serial.println(F("MAX30105 was not found. Please check wiring/power."));
@@ -39,39 +27,23 @@ void setup() {
   }
 
   byte ledBrightness = 60; 
-  byte sampleAverage = 4;
+  byte sampleAverage = 1;
   byte ledMode = 2; // Options: 1 = Red only, 2 = Red + IR, 3 = Red + IR + Green
-  byte sampleRate = 400; // Options: 50, 100, 200, 400, 800, 1000, 1600, 3200
+  int sampleRate = 1000; // Options: 50, 100, 200, 400, 800, 1000, 1600, 3200
   int pulseWidth = 411; // Options: 69, 118, 215, 411
   int adcRange = 4096; // Options: 2048, 4096, 8192, 16384
 
   particleSensor.setup(ledBrightness, sampleAverage, ledMode, sampleRate, pulseWidth, adcRange); // Configure sensor with these settings
 }
-
 void loop() {
-  const int bufferLength = BUFFER_SIZE; // Buffer length of 100 stores 4 seconds of samples running at 25sps
-
   // Read samples and print raw data in CSV format
-  for (int i = 0; i < bufferLength; i++) {
-    while (particleSensor.available() == false) // Do we have new data?
-      particleSensor.check(); // Check the sensor for new data
-
-    redBuffer[i] = particleSensor.getRed();
-    irBuffer[i] = particleSensor.getIR();
-    particleSensor.nextSample(); // We're finished with this sample so move to next sample
-
-    // Get the current time
-    unsigned long currentTime = now();
-    // Print data in CSV format
-    Serial.print(currentTime);
-    Serial.print(",");
-    Serial.print(redBuffer[i], DEC);
-    Serial.print(",");
-    Serial.print(irBuffer[i], DEC);
-    Serial.print(",");
-    
-    // Read and print GSR sensor value
-    int sensorValue = analogRead(GSR);
-    Serial.println(sensorValue);
-  }
+  do {
+      Serial.print(millis());
+      Serial.print(",");
+      Serial.print(particleSensor.getRed());
+      Serial.print(",");
+      Serial.print(particleSensor.getIR());
+      Serial.print(",");
+      Serial.println(analogRead(A0));
+  }while (true);
 }
