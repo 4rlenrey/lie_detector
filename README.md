@@ -5,7 +5,7 @@
   <p><strong>Usage</strong></p>
 </div>
 
-Me and 2 of my uni colleagues made this project for AI in medicine subject. 
+Me and 2 of my uni colleagues made this project for AI in medicine subject because we thought the given topics were too easy. 
 
 This project combines hardware and software to create a system that can detect lies by analyzing physiological signals. Here's a quick overview of what this project entails and how everything fits together.
 
