@@ -40,14 +40,6 @@ A specially designed and 3D-printed piece holds a finger using an elastic sleeve
 
 - Data collection is done through Arduino via a serial connection using PySide6 for handling data collection.
 
-### Processing
-
-- **Low Pass Filtering**: Removes high-frequency noise.
-- **Baseline Correction**: Mitigates the passive sweating effect over time.
-- **Notch Filter**: Removes specified frequency ranges.
-- **Clipping**: Limits peaks in the raw data to eliminate hardware artifacts.
-- **Normalization**: Normalizes values to intervals, with each parameter having an interval of 1/10 of a second per reading.
-- The processed data is composed into a 3x100 matrix and sent to a neural network model for prediction.
 
 ### Analysis
 
