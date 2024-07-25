@@ -1,13 +1,13 @@
-import sys
 import csv
-import serial
 import time
-from datetime import datetime
-from PySide6.QtCore import QThread, Signal, Slot, QObject
-from PySide6.QtWidgets import QApplication, QWidget, QVBoxLayout, QPushButton
-import serial.tools.list_ports
 
-from client.constants import SECONDS_RECORDING, SERIAL_COMMUNICATION_BITS
+import serial
+import serial.tools.list_ports
+from PySide6.QtCore import QObject, QThread, Signal, Slot
+from PySide6.QtWidgets import QPushButton, QVBoxLayout, QWidget
+
+from lie_detector.constants import SECONDS_RECORDING
+
 
 def find_arduino_port():
     ports = list(serial.tools.list_ports.comports())
@@ -26,17 +26,15 @@ class ArduinoReader(QThread):
         self.running = False
 
     def run(self):
-        # Connect to the Arduino
-        with serial.Serial(self.serial_port, 115200, timeout=1) as ser:
+        with serial.Serial(self.serial_port, 230400, timeout=1) as ser:
             self.running = True
             start_time = time.time()
             while self.running and (time.time() - start_time < SECONDS_RECORDING):
-                # Read a line from the Arduino
-                line = ser.readline().decode('utf-8').rstrip()
+                line = ser.readline().decode("utf-8").rstrip()
                 print(line)
 
                 if line:
-                    data = line.split(',')
+                    data = line.split(",")
                     if len(data) == 4:
                         timestamp, red, ir, gsr = data
                         self.data_ready.emit([timestamp, red, ir, gsr])
@@ -44,6 +42,7 @@ class ArduinoReader(QThread):
 
     def stop(self):
         self.running = False
+
 
 class DataRecorder(QObject):
     def __init__(self, serial_port):
@@ -60,18 +59,16 @@ class DataRecorder(QObject):
         self.recording = []
         self.reader.start()
 
-    def stop_recording_and_save(self):
+    def stop_recording_and_save(self, path):
         self.reader.stop()
-        self.reader.wait()  # Ensure the thread has finished
+        self.reader.wait()
 
-        # Save the recording to a CSV file
-        timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
-        filename = f"data/recordings/{timestamp}_recording.csv"
-        with open(filename, 'w', newline='') as csvfile:
+        with open(path, "w", newline="") as csvfile:
             writer = csv.writer(csvfile)
-            writer.writerow(['Timestamp', 'Red', 'IR', 'GSR'])
             writer.writerows(self.recording)
-        print(f"Recording saved to {filename}")
+        print(f"Recording saved to {path}")
+        self.recording = []
+
 
 class MainWindow(QWidget):
     def __init__(self, serial_port):
@@ -92,25 +89,5 @@ class MainWindow(QWidget):
         layout.addWidget(self.stop_button)
 
         self.setLayout(layout)
-        self.setWindowTitle('Arduino Data Recorder')
+        self.setWindowTitle("Arduino Data Recorder")
         self.show()
-
-
-
-def read_from_arduino(serial_port):
-    # Connect to the Arduino
-    with serial.Serial(serial_port, 115200, timeout=1) as ser:
-        while True:
-            # Read a line from the Arduino
-            line = ser.readline().decode('utf-8').rstrip()
-            if line:
-                print(line)
-
-
-# if __name__ == "__main__":
-#     arduino_port = find_arduino_port()
-#     if arduino_port:
-#         print(f"Arduino found on port {arduino_port}")
-#         read_from_arduino(arduino_port)
-#     else:
-#         print("Arduino not found")

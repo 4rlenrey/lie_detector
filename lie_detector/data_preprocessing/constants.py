@@ -1,0 +1,5 @@
+START_TIME = 2.0
+END_TIME = 9.0
+CUTOFF_FREQ = 5
+A = 110.0  
+B = 25.0 

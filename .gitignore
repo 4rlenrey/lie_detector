@@ -15,3 +15,4 @@ data/
 data_full/
 questions/
 lie_detector_model.h5
+.env

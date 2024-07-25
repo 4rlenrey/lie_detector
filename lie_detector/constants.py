@@ -1,0 +1,16 @@
+import os
+
+from dotenv import load_dotenv
+
+SERIAL_COMMUNICATION_BITS = 9600
+SECONDS_QUESTION = 10
+SECONDS_RECORDING = 12
+
+load_dotenv()
+
+QUESTIONS_PATH = os.getenv("QUESTIONS_PATH")
+RECORDINGS_DIR = os.getenv("RECORDINGS_DIR")
+RECORDINGS_PROCESSED_DIR = os.getenv("RECORDINGS_PROCESSED_DIR")
+PLOTS_DIR = os.getenv("PLOTS_DIR")
+ANSWERS_DIR = os.getenv("ANSWERS_DIR")
+MODEL_PATH = os.getenv("MODEL_PATH")
